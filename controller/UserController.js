@@ -19,11 +19,15 @@ export const create=async(req,res)=>{
     }
 }
 
-//basic setup
+//for getting all users from the database
 
 export const fetch=async(req,res)=>{
     try{
-        res.json("Hello World")
+        const users=await User.find();
+        if(users.length===0){
+            return res.status(404).json({message:"User not found"})
+        }
+        res.status(200).json(users);
 
     }catch(error){
         res.status(500).json({error:"internal server error"})
