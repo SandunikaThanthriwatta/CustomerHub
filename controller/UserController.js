@@ -18,11 +18,11 @@ export const create=async(req,res)=>{
         res.status(500).json({error:"internal server error"})
     }
 }
-
 //for getting all users from the database
 
 export const fetch=async(req,res)=>{
     try{
+        
         const users=await User.find();
         if(users.length===0){
             return res.status(404).json({message:"User not found"})
@@ -31,7 +31,21 @@ export const fetch=async(req,res)=>{
 
     }catch(error){
         res.status(500).json({error:"internal server error"})
-
     }
-
 }
+
+//For updating data
+export const update=async(req,res)=>{
+    try{
+        const id=req.params.id;
+        const userExist=await User.findOne({_id:id})
+        if(!userExist){
+            return res.status(404).json({message:"User not found."})
+        }
+        const updateUser=await User.findByIdAndUpdate(id,req.body,{new:true});
+        res.status(201).json(updateUser);
+    }catch (error){
+        res.status(500).json({error:"Internal server error."})
+    }
+}
+
